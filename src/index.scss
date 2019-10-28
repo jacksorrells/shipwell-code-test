@@ -1,0 +1,71 @@
+// General Settings
+html {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+*, *:before, *:after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  color: #202020;
+  background-color: #fafafa;
+  font-smooth: always;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+
+// App
+.App{
+  display: flex;
+  flex-direction: column;
+  height:100vh;
+}
+
+
+// Add Stop
+.add-stop{
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+
+
+  div{
+    padding:10px;
+  }
+}
+
+
+
+
+// Ininerary List
+.ininerary-list{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px;
+
+  ul {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
+}
+
+
+
+
+// Errors
