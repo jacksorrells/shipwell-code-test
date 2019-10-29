@@ -1,6 +1,6 @@
 import React from 'react';
 import { ItineraryItem } from './ItineraryItem';
-
+import { itinerary } from '../data/testData';
 
 
 export const ItineraryList = () => {
@@ -10,8 +10,9 @@ export const ItineraryList = () => {
     <div className="ininerary-list">
       <h2>Itinerary List:</h2>
       <ul>
-        <ItineraryItem />
-        <ItineraryItem />
+        {itinerary.stops.map(stop => (
+          <ItineraryItem stop={stop} />
+        ))}
       </ul>
     </div>
   )
