@@ -33,12 +33,22 @@ body {
 // Add Stop
 .add-stop{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   padding: 10px;
+
+  .add-stop-form{
+    display:flex;
+    justify-content: center;
+  }
 
 
   div{
     padding:10px;
+  }
+
+  .add-stop-error{
+    text-align: center;
   }
 }
 
@@ -61,6 +71,17 @@ body {
       display: flex;
       justify-content: space-around;
       align-items: center;
+
+      .stop-action-box {
+        width: 20vw;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .stop-text{
+        width:80vw;
+        flex-direction: column;
+      }
     }
   }
 }

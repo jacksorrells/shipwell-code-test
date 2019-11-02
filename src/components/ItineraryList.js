@@ -11,7 +11,7 @@ export const ItineraryList = () => {
       <h2>Itinerary List:</h2>
       <ul>
         {itinerary.stops.map(stop => (
-          <ItineraryItem stop={stop} />
+          <ItineraryItem key={stop.id} stop={stop} />
         ))}
       </ul>
     </div>

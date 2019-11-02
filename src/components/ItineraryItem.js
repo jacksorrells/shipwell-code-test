@@ -6,13 +6,13 @@ export const ItineraryItem = ({ stop }) => {
 
   return (
     <li>
-      <div>
+      <div className="stop-action-box">
         <span>
           <input 
             type="checkbox" 
             id="complete-stop" 
             name="complete-stop" />
-          <label for="complete-stop">Complete:</label>
+          <label htmlFor="complete-stop">Complete:</label>
         </span>
         <span>Stop {stop.id}</span>
       </div>
@@ -20,19 +20,21 @@ export const ItineraryItem = ({ stop }) => {
 
 
       {!isEditing && (
-        <div>
+        <div className="stop-text">
           <h3>{stop.name}</h3>
           <p>{stop.address}</p>
         </div>
       )}
       
       {isEditing && (
-        <AddStop />
+        <div className="stop-text">
+          <AddStop />
+        </div>
       )}
 
 
 
-      <div>
+      <div className="stop-action-box">
         <button
           type="button"
           onClick={() => setIsEditing(!isEditing)}
