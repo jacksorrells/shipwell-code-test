@@ -5,54 +5,53 @@ import {
   DELETE_STOP,
   COMPLETE_STOP,
   REQUEST_ADDRESS_VALIDATION,
-  RECIEVE_ADDRESS_VALIDATION,
+  RECEIVE_ADDRESS_VALIDATION,
 } from '../actions';
+import { generatePushId } from '../helpers';
 
-const stop = (
-  state = {
-    isFetching: false,
-    stopName: '',
-    formattedAddress: '',
-    isCompleted: false
-  }, action
-) => {
+const stops = (state = [], action) => {
   switch(action.type) {
+    case ADD_STOP:
+      return [
+        ...state,
+        {
+          id: generatePushId(),
+          isFetching: false,
+          stopName: action.stop.name,
+          unformattedAddress: action.stop.address,
+          formattedAddress: '',
+          isCompleted: false
+        }
+      ]
     case EDIT_STOP:
       return;
     case COMPLETE_STOP:
-      return;
-    case DELETE_STOP:
-      return;
+      return state.map((stop, index));
+    case REQUEST_ADDRESS_VALIDATION:
+      return {
+        ...state,
+        isFetching: true
+      };
+    case RECEIVE_ADDRESS_VALIDATION:
+      return {
+        ...state,
+        isFetching: false
+      };
     default:
       return state;
   }
 }
 
 const itinerary = (
-  state = {
-    stops: [],
-  },
-  action
+  state = {}, action
 ) => {
   switch (action.type) {
-    case ADD_STOP:
-      return;
     case EDIT_STOP:
       return;
     case DELETE_STOP:
       return;
     case COMPLETE_STOP:
       return;
-    case REQUEST_ADDRESS_VALIDATION:
-      return {
-        ...state,
-        isFetching: true
-      };
-    case RECIEVE_ADDRESS_VALIDATION:
-      return {
-        ...state,
-        isFetching: false,
-      };
     default:
       return state;
   }
@@ -60,7 +59,8 @@ const itinerary = (
 
 
 const rootReducer = combineReducers({
-  itinerary
+  itinerary,
+  stops
 });
 
 export default rootReducer;

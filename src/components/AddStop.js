@@ -1,14 +1,27 @@
 import React, { useState } from "react";
+import { useDispatch } from 'react-redux';
+import { ADD_STOP } from "../actions";
 
 export const AddStop = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [isError, setIsError] = useState(false);
   const [stopName, setStopName] = useState("");
   const [stopAddress, setStopAddress] = useState("");
+  const dispatch = useDispatch();
 
   const addStop = () => {
     console.log("stopName -> ", stopName);
     console.log("stopAddress -> ", stopAddress);
+    const stop = {
+      name: stopName,
+      address: stopAddress
+    };
+    dispatch({
+      type: ADD_STOP,
+      stop
+    });
+    setIsFetching(true);
+
   };
 
   return (
@@ -35,7 +48,11 @@ export const AddStop = () => {
           />
         </div>
         <div className="add-stop-button-wrap">
-          <button className="add-stop-button" type="button">
+          <button 
+            className="add-stop-button" 
+            type="button"
+            onClick={() => addStop()}
+          >
             Add Stop
           </button>
         </div>
