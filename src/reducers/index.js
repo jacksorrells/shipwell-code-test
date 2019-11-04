@@ -4,8 +4,6 @@ import {
   EDIT_STOP,
   DELETE_STOP,
   COMPLETE_STOP,
-  REQUEST_ADDRESS_VALIDATION,
-  RECEIVE_ADDRESS_VALIDATION,
 } from '../actions';
 
 const stops = (state = [], action) => {
@@ -23,13 +21,12 @@ const stops = (state = [], action) => {
         }
       ]
     case EDIT_STOP:
-      console.log('edit stop')
-      console.log('state -> ', state)
       return state.map((stop) => {
         if (stop.id === action.stop.id) {
           return Object.assign({}, stop, {
             name: action.stop.name,
             unformattedAddress: action.stop.address,
+            validatedAddress: action.stop.validatedAddress
           })
         }
         return stop;
@@ -43,17 +40,6 @@ const stops = (state = [], action) => {
         }
         return stop;
       });
-    case REQUEST_ADDRESS_VALIDATION:
-      return {
-        ...state,
-        isFetching: true
-      };
-    case RECEIVE_ADDRESS_VALIDATION:
-      return {
-        ...state,
-        isFetching: false,
-        formattedAddress: action.data.formattedAddress
-      };
     default:
       return state;
   }

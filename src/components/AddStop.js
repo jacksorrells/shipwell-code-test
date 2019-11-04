@@ -36,6 +36,17 @@ export const AddStop = ({ propStop, closeAddStop }) => {
       
       const json = await response.json();
       setValidatedAddress(json.geocoded_address)
+
+      const stop = {
+        id: isEditing ? propStop.id : generatePushId(),
+        name: stopName,
+        address: stopAddress,
+        validatedAddress: json.geocoded_address
+      };
+      isEditing
+        ? dispatch({ type: EDIT_STOP, stop })
+        : dispatch({ type: ADD_STOP, stop });
+
       setIsValidated(true)
     }
 
@@ -44,32 +55,19 @@ export const AddStop = ({ propStop, closeAddStop }) => {
     }
   }, [isFetching, stopAddress]);
 
-  // dispatches add/edit once validated
-  useEffect(() => {
-    if (isValidated) {
-      const stop = {
-        id: generatePushId(),
-        name: stopName,
-        address: stopAddress,
-        validatedAddress
-      };
-      dispatch({ type: ADD_STOP, stop });
-    }
-  }, [isValidated, dispatch, validatedAddress, stopName, stopAddress])
 
   const addStop = (e) => {
     e.preventDefault();
     setIsFetching(true);
   };
 
-  const editStop = () => {
-    const stop = {
-      id: propStop.id,
-      name: stopName,
-      address: stopAddress
-    };
-    dispatch({ type: EDIT_STOP, stop });
-    closeAddStop(false);
+  const editStop = (e) => {
+    e.preventDefault();
+
+    //setIsFetching(true);
+    
+    //dispatch({ type: EDIT_STOP, stop });
+    //closeAddStop(false);
   };
 
   return (
@@ -114,8 +112,8 @@ export const AddStop = ({ propStop, closeAddStop }) => {
             <button
               className="edit-stop-button"
               type="button"
-              onClick={() => editStop()}
-              onKeyDown={() => editStop()}
+              onClick={e => editStop(e)}
+              onKeyDown={e => editStop(e)}
             >
               Save Changes
             </button>
