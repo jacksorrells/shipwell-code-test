@@ -26,7 +26,7 @@ export const ItineraryItem = ({ stop, index }) => {
             name="complete-stop" />
           <label htmlFor="complete-stop">Complete:</label>
         </span>
-        <span>Stop {index+1}</span>
+        <span>{index+1}</span>
       </div>
 
 
@@ -34,13 +34,13 @@ export const ItineraryItem = ({ stop, index }) => {
       {!isEditing && (
         <div className="stop-text">
           <h3>{stop.name}</h3>
-          <p>{stop.unformattedAddress}</p>
+          <p>{stop.validatedAddress.formatted_address}</p>
         </div>
       )}
       
       {isEditing && (
         <div className="stop-text">
-          <AddStop stop={stop} />
+          <AddStop propStop={stop} closeAddStop={setIsEditing} />
         </div>
       )}
 

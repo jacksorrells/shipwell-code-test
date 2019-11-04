@@ -18,15 +18,17 @@ const stops = (state = [], action) => {
           isFetching: false,
           name: action.stop.name,
           unformattedAddress: action.stop.address,
-          formattedAddress: '',
+          validatedAddress: action.stop.validatedAddress,
           completed: false
         }
       ]
     case EDIT_STOP:
+      console.log('edit stop')
+      console.log('state -> ', state)
       return state.map((stop) => {
-        if (stop.id === action.id) {
+        if (stop.id === action.stop.id) {
           return Object.assign({}, stop, {
-            stopName: action.stop.name,
+            name: action.stop.name,
             unformattedAddress: action.stop.address,
           })
         }
