@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
 import { AddStop } from './AddStop';
 
-export const ItineraryItem = ({ stop }) => {
+export const ItineraryItem = ({ stop, index }) => {
   const [ isEditing, setIsEditing ] = useState(false);
+
+  const completeStop = () => {
+    return;
+  };
+
+  const editStop = () => {
+    return;
+  };
+
+  const deleteStop = () => {
+    return;
+  }
 
   return (
     <li>
@@ -14,7 +26,7 @@ export const ItineraryItem = ({ stop }) => {
             name="complete-stop" />
           <label htmlFor="complete-stop">Complete:</label>
         </span>
-        <span>Stop {stop.id}</span>
+        <span>Stop {index+1}</span>
       </div>
 
 
@@ -22,13 +34,13 @@ export const ItineraryItem = ({ stop }) => {
       {!isEditing && (
         <div className="stop-text">
           <h3>{stop.name}</h3>
-          <p>{stop.address}</p>
+          <p>{stop.unformattedAddress}</p>
         </div>
       )}
       
       {isEditing && (
         <div className="stop-text">
-          <AddStop />
+          <AddStop stop={stop} />
         </div>
       )}
 

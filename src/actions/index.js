@@ -60,7 +60,7 @@ const shouldFetchStopValidation = (state, stop) => {
   if (stops.isFetching) {
     return false;
   }
-  return stops.didInvalidate;
+  
 }
 
 export const fetchStopValidationIfNeeded = stop => (dispatch, getState) => {

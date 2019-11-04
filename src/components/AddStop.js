@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch } from 'react-redux';
 import { ADD_STOP } from "../actions";
+import { generatePushId } from '../helpers';
 
 export const AddStop = () => {
+  const [isEditing, setIsEditing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [isError, setIsError] = useState(false);
   const [stopName, setStopName] = useState("");
@@ -13,15 +15,15 @@ export const AddStop = () => {
     console.log("stopName -> ", stopName);
     console.log("stopAddress -> ", stopAddress);
     const stop = {
+      id: generatePushId(),
       name: stopName,
       address: stopAddress
     };
-    dispatch({
-      type: ADD_STOP,
-      stop
-    });
+    dispatch({ type: ADD_STOP, stop });
     setIsFetching(true);
 
+    setStopName('');
+    setStopAddress('');
   };
 
   return (
@@ -34,6 +36,7 @@ export const AddStop = () => {
             id="stop-name-input"
             name="stop-name-input"
             required
+            value={stopName}
             onChange={e => setStopName(e.target.value)}
           />
         </div>
@@ -44,6 +47,7 @@ export const AddStop = () => {
             id="stop-name-input"
             name="stop-name-input"
             required
+            value={stopAddress}
             onChange={e => setStopAddress(e.target.value)}
           />
         </div>
@@ -66,7 +70,7 @@ export const AddStop = () => {
 
       {isFetching && (
         <div className="add-stop-adding">
-          <p>Adding...</p>
+          <p>Saving...</p>
         </div>
       )}
     </div>
