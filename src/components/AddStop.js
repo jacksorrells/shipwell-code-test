@@ -27,11 +27,6 @@ export const AddStop = ({ propStop, closeAddStop }) => {
     }
   };
 
-  const editStop = (e) => {
-    e.preventDefault();
-    setIsFetching(true);
-  };
-
   const formatStop = useCallback((validatedAddress) => {
     const stop = {
       id: isEditing ? propStop.id : generatePushId(),
@@ -61,6 +56,7 @@ export const AddStop = ({ propStop, closeAddStop }) => {
   }, [propStop]);
 
   // validates entered address after submit
+  // needs to be moved along with stop state, into a custom hook if wanted to continue the hooks route. would probably rather move to a thunk or saga
   useEffect(() => {
     async function validateAddress() {
       const url = `https://dev-api.shipwell.com/v2/locations/addresses/validate/`;
@@ -131,27 +127,15 @@ export const AddStop = ({ propStop, closeAddStop }) => {
         </div>
 
         <div className="add-stop-button-wrap">
-          {!isEditing && (
             <button
               className="add-stop-button"
               type="submit"
               onClick={e => addStop(e)}
               onKeyDown={e => addStop(e)}
+              tabIndex={0}
             >
-              Add Stop
+              {isEditing ? "Save Changes": 'Add Stop'}
             </button>
-          )}
-
-          {isEditing && (
-            <button
-              className="edit-stop-button"
-              type="button"
-              onClick={e => editStop(e)}
-              onKeyDown={e => editStop(e)}
-            >
-              Save Changes
-            </button>
-          )}
         </div>
       </form>
 

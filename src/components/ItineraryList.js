@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 
 export const ItineraryList = () => {
   const stops = useSelector(state => state.stops);
-  console.log('stops -> ', stops);
 
   return (
     <div className="ininerary-list">

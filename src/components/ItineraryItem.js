@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { AddStop } from './AddStop';
 import { COMPLETE_STOP, DELETE_STOP } from '../actions';
@@ -16,7 +16,8 @@ export const ItineraryItem = ({ stop, index }) => {
             id="complete-stop" 
             name="complete-stop"
             onClick={() => dispatch({ type: COMPLETE_STOP, stop })} 
-            onKeyDown={() => dispatch({ type: COMPLETE_STOP, stop })}  
+            onKeyDown={() => dispatch({ type: COMPLETE_STOP, stop })}
+            tabIndex={0}
           />
           <label htmlFor="complete-stop">Complete:</label>
         </span>
@@ -45,14 +46,16 @@ export const ItineraryItem = ({ stop, index }) => {
           type="button"
           onClick={() => setIsEditing(!isEditing)}
           onKeyDown={() => setIsEditing(!isEditing)}
+          tabIndex={0}
         >
-          {isEditing ? 'cancel' : 'edit'}
+          {isEditing ? 'Cancel' : 'Edit'}
         </button>
         <button
           type="button"
           onClick={() => dispatch({ type: DELETE_STOP, stop })}
           onKeyDown={() => dispatch({ type: DELETE_STOP, stop })}
-        >delete</button>
+          tabIndex={0}
+        >Delete</button>
       </div>
     </li>
   )
