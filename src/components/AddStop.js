@@ -75,7 +75,7 @@ export const AddStop = ({ propStop, closeAddStop }) => {
       const url = `https://dev-api.shipwell.com/v2/locations/addresses/validate/`;
       const data = { formatted_address: stopAddress };
 
-      const response = await fetch(url, {
+      await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +120,8 @@ export const AddStop = ({ propStop, closeAddStop }) => {
     callCloseAddStop,
     formatStop,
     dispatch,
-    cleanUp
+    cleanUp,
+    handleApiError
   ]);
 
   useEffect(() => {

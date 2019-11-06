@@ -21,34 +21,45 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+// Mixins
+@mixin mixFlex() {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
 
-
+@mixin mq($from) {
+  @media (max-width: $from) {
+    @content;
+  }
+}
 
 // App
 .App{
-  display: flex;
+  @include mixFlex();
   flex-direction: column;
   height:100vh;
 }
 
 button{
   padding: 2px 8px;
-    border-radius: 3px;
-    background-color: #006ba2;
-    color: #fff !important;
-    border: 1px solid transparent;
-    font-weight: bold;
-    font-size: 13px !important;
+  border-radius: 3px;
+  background-color: #006ba2;
+  color: #fff !important;
+  border: 1px solid transparent;
+  font-weight: bold;
+  font-size: 13px !important;
 }
 
 // Add Stop
 .add-stop{
-  display: flex;
+  @include mixFlex();
   flex-direction: column;
   justify-content: center;
 
   .add-stop-form{
-    display:flex;
+    @include mixFlex();
+    flex-wrap:wrap;
     justify-content: center;
 
     label { padding: 5px; }
@@ -63,12 +74,9 @@ button{
   background-color: lightgrey;
 }
 
-
-
-
 // Ininerary List
 .ininerary-list{
-  display: flex;
+  @include mixFlex();
   align-items: center;
   flex-direction: column;
   padding: 10px;
@@ -79,9 +87,13 @@ button{
     padding: 0px;
 
     li {
-      display: flex;
+      @include mixFlex();
       justify-content: space-around;
       align-items: center;
+
+      @include mq('500px') {
+        flex-wrap: wrap;
+      }
 
       .stop-action-box {
         width: 20vw;
@@ -93,6 +105,10 @@ button{
         width:80vw;
         flex-direction: column;
       }
+    }
+
+    @include mq('800px') {
+      padding: 0px;
     }
   }
 }
