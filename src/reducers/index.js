@@ -9,8 +9,6 @@ import {
 const stops = (state = [], action) => {
   switch(action.type) {
     case ADD_STOP:
-      console.log("ADD_STOP")
-      console.log('aciton -> ', action)
       return [
         ...state,
         {
@@ -35,13 +33,15 @@ const stops = (state = [], action) => {
       });
     case COMPLETE_STOP:
       return state.map((stop) => {
-        if (stop.id === action.id) {
+        if (stop.id === action.stop.id) {
           return Object.assign({}, stop, {
             completed: !stop.completed
           })
         }
         return stop;
       });
+    case DELETE_STOP:
+      return state.filter((stop) => { return stop.id !== action.stop.id });
     default:
       return state;
   }

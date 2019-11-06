@@ -2,35 +2,33 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { ADD_STOP, EDIT_STOP } from "../actions";
 import { generatePushId } from "../helpers";
+import { errorMessages } from '../data';
 
 export const AddStop = ({ propStop, closeAddStop }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [isError, setIsError] = useState(-1);
+  const [isError, setIsError] = useState('');
   const [isValidated, setIsValidated] = useState(false);
   const [stopName, setStopName] = useState(propStop ? propStop.name : "");
   const [stopAddress, setStopAddress] = useState(propStop ? propStop.validatedAddress.formatted_address : "");
-  //  const [validatedAddress, setValidatedAddress] = useState(propStop ? propStop.validatedAddress : {});
   const dispatch = useDispatch();
 
   const addStop = (e) => {
     e.preventDefault();
     if (stopAddress.length < 3) {
-      console.log('error 1')
-      setIsError(1);
+      setIsError('threeCharAddress');
       cleanUp();
     } else if (stopName === "" || stopAddress === "") {
-      console.log('error 0')
-      setIsError(0);
+      setIsError('empty');
       cleanUp()
     } else {
+      setIsError('');
       setIsFetching(true);
     }
   };
 
   const editStop = (e) => {
     e.preventDefault();
-
     setIsFetching(true);
   };
 
@@ -80,21 +78,13 @@ export const AddStop = ({ propStop, closeAddStop }) => {
 
         const json = await response.json();
         const stop = formatStop(json.geocoded_address);
-        console.log('validateAddress')
-        console.log("stop -> ", stop)
-        if (isEditing) {
-          dispatch({ type: EDIT_STOP, stop });
-          //callCloseAddStop();
-        } else {
-          dispatch({ type: ADD_STOP, stop });
-          //cleanUp();
-        }
-
+        isEditing
+          ? dispatch({ type: EDIT_STOP, stop })
+          : dispatch({ type: ADD_STOP, stop });
         setIsValidated(true)
       } catch (e) {
-        console.log('error')
-        console.log('e -> ', e);
-        setIsError(2);
+        setIsError("apiError");
+        setIsFetching(false)
       }
     }
 
@@ -165,9 +155,9 @@ export const AddStop = ({ propStop, closeAddStop }) => {
         </div>
       </form>
 
-      {isError > -1 && (
+      {isError !== "" && (
         <div className="add-stop-error">
-          <p>Validation error. Try again.</p>
+          <p>{errorMessages[isError]}</p>
         </div>
       )}
 

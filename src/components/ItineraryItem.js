@@ -1,24 +1,11 @@
 import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { AddStop } from './AddStop';
+import { COMPLETE_STOP, DELETE_STOP } from '../actions';
 
 export const ItineraryItem = ({ stop, index }) => {
   const [ isEditing, setIsEditing ] = useState(false);
-
-  const completeStop = () => {
-    return;
-  };
-
-  const editStop = () => {
-    return;
-  };
-
-  const deleteStop = () => {
-    return;
-  }
-
-  const closeAddStop = useCallback(() => {
-    setIsEditing(!isEditing);
-  })
+  const dispatch = useDispatch();
 
   return (
     <li>
@@ -27,7 +14,10 @@ export const ItineraryItem = ({ stop, index }) => {
           <input 
             type="checkbox" 
             id="complete-stop" 
-            name="complete-stop" />
+            name="complete-stop"
+            onClick={() => dispatch({ type: COMPLETE_STOP, stop })} 
+            onKeyDown={() => dispatch({ type: COMPLETE_STOP, stop })}  
+          />
           <label htmlFor="complete-stop">Complete:</label>
         </span>
         <span>{index+1}</span>
@@ -44,7 +34,7 @@ export const ItineraryItem = ({ stop, index }) => {
       
       {isEditing && (
         <div className="stop-text">
-          <AddStop propStop={stop} closeAddStop={closeAddStop} />
+          <AddStop propStop={stop} closeAddStop={setIsEditing} />
         </div>
       )}
 
@@ -54,10 +44,15 @@ export const ItineraryItem = ({ stop, index }) => {
         <button
           type="button"
           onClick={() => setIsEditing(!isEditing)}
+          onKeyDown={() => setIsEditing(!isEditing)}
         >
           {isEditing ? 'cancel' : 'edit'}
         </button>
-        <button>delete</button>
+        <button
+          type="button"
+          onClick={() => dispatch({ type: DELETE_STOP, stop })}
+          onKeyDown={() => dispatch({ type: DELETE_STOP, stop })}
+        >delete</button>
       </div>
     </li>
   )
