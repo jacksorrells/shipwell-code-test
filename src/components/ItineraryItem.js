@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { AddStop } from './AddStop';
 
 export const ItineraryItem = ({ stop, index }) => {
@@ -15,6 +15,10 @@ export const ItineraryItem = ({ stop, index }) => {
   const deleteStop = () => {
     return;
   }
+
+  const closeAddStop = useCallback(() => {
+    setIsEditing(!isEditing);
+  })
 
   return (
     <li>
@@ -40,7 +44,7 @@ export const ItineraryItem = ({ stop, index }) => {
       
       {isEditing && (
         <div className="stop-text">
-          <AddStop propStop={stop} closeAddStop={setIsEditing} />
+          <AddStop propStop={stop} closeAddStop={closeAddStop} />
         </div>
       )}
 

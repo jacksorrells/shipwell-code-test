@@ -9,6 +9,8 @@ import {
 const stops = (state = [], action) => {
   switch(action.type) {
     case ADD_STOP:
+      console.log("ADD_STOP")
+      console.log('aciton -> ', action)
       return [
         ...state,
         {
