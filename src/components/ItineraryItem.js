@@ -19,7 +19,6 @@ export const ItineraryItem = ({ stop, index }) => {
             onKeyDown={() => dispatch({ type: COMPLETE_STOP, stop })}
             tabIndex={0}
           />
-          <label htmlFor="complete-stop">Complete:</label>
         </span>
         <span>{index+1}</span>
       </div>

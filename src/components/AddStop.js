@@ -2,53 +2,65 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { ADD_STOP, EDIT_STOP } from "../actions";
 import { generatePushId } from "../helpers";
-import { errorMessages } from '../data';
+import { errorMessages } from "../data";
 
 export const AddStop = ({ propStop, closeAddStop }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
-  const [isError, setIsError] = useState('');
+  const [isError, setIsError] = useState("");
   const [isValidated, setIsValidated] = useState(false);
   const [stopName, setStopName] = useState(propStop ? propStop.name : "");
-  const [stopAddress, setStopAddress] = useState(propStop ? propStop.validatedAddress.formatted_address : "");
+  const [stopAddress, setStopAddress] = useState(
+    propStop ? propStop.validatedAddress.formatted_address : ""
+  );
   const dispatch = useDispatch();
 
-  const addStop = (e) => {
+  const addStop = e => {
     e.preventDefault();
     if (stopAddress.length < 3) {
-      setIsError('threeCharAddress');
+      setIsError("threeCharAddress");
       cleanUp();
     } else if (stopName === "" || stopAddress === "") {
-      setIsError('empty');
-      cleanUp()
+      setIsError("empty");
+      cleanUp();
     } else {
-      setIsError('');
+      setIsError("");
       setIsFetching(true);
     }
   };
 
-  const formatStop = useCallback((validatedAddress) => {
-    const stop = {
-      id: isEditing ? propStop.id : generatePushId(),
-      name: stopName,
-      address: stopAddress,
-      validatedAddress: validatedAddress
-    };
-    return stop;
-  }, [stopName, stopAddress, propStop, isEditing]);
+  const formatStop = useCallback(
+    validatedAddress => {
+      const stop = {
+        id: isEditing ? propStop.id : generatePushId(),
+        name: stopName,
+        address: stopAddress,
+        validatedAddress: validatedAddress
+      };
+      return stop;
+    },
+    [stopName, stopAddress, propStop, isEditing]
+  );
 
   const cleanUp = useCallback(() => {
     setStopName("");
     setStopAddress("");
     setIsFetching(false);
-    setIsValidated(false)
+    setIsValidated(false);
   }, [setStopName, setStopAddress, setIsFetching, setIsValidated]);
 
   const callCloseAddStop = useCallback(() => {
     closeAddStop(false);
-  }, [closeAddStop])
+  }, [closeAddStop]);
 
-  // sets editing vs adding on component render 
+  const handleApiError = useCallback((response) => {
+    console.log("apiError -> ", response);
+    setIsError("apiError");
+    cleanUp();
+    setIsFetching(false);
+  }, [setIsError, cleanUp, setIsFetching]);
+
+  // sets editing vs adding on component render
   useEffect(() => {
     if (propStop) {
       setIsEditing(true);
@@ -58,50 +70,67 @@ export const AddStop = ({ propStop, closeAddStop }) => {
   // validates entered address after submit
   // needs to be moved along with stop state, into a custom hook if wanted to continue the hooks route. would probably rather move to a thunk or saga
   useEffect(() => {
+    let isMounted = true;
     async function validateAddress() {
       const url = `https://dev-api.shipwell.com/v2/locations/addresses/validate/`;
       const data = { formatted_address: stopAddress };
 
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-            "Cache-Control": "no-cache"
-          },
-          body: JSON.stringify(data)
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache"
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => {
+          console.log("res -> ", res);
+          if (res.status === 200) {
+            return res.json();
+          } else {
+            handleApiError(res);
+          }
         })
-
-        const json = await response.json();
-        const stop = formatStop(json.geocoded_address);
-        isEditing
-          ? dispatch({ type: EDIT_STOP, stop })
-          : dispatch({ type: ADD_STOP, stop });
-        setIsValidated(true)
-      } catch (e) {
-        setIsError("apiError");
-        setIsFetching(false)
-      }
+        .then(json => {
+          console.log("json -> ", json);
+          const stop = formatStop(json.geocoded_address);
+          isEditing
+            ? dispatch({ type: EDIT_STOP, stop })
+            : dispatch({ type: ADD_STOP, stop });
+          if (isMounted) {
+            setIsValidated(true);
+          }
+        })
+        .catch(e => {
+          handleApiError(e);
+        });
     }
 
     if (isFetching) {
       validateAddress();
     }
-  }, [isFetching, isEditing, stopAddress, callCloseAddStop, formatStop, dispatch]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    isFetching,
+    isEditing,
+    stopAddress,
+    callCloseAddStop,
+    formatStop,
+    dispatch,
+    cleanUp
+  ]);
 
   useEffect(() => {
     if (isValidated) {
-      isEditing
-        ? callCloseAddStop()
-        : cleanUp();
+      isEditing ? callCloseAddStop() : cleanUp();
     }
   }, [isValidated, isEditing, callCloseAddStop, cleanUp]);
 
-
-
-
   return (
-    <div className="add-stop">
+    <div className={isEditing ? "add-stop" : "add-stop add-stop-top"}>
       <form className="add-stop-form">
         <div className="stop-name">
           <label htmlFor="stop-name-input">Stop Name:</label>
@@ -127,15 +156,15 @@ export const AddStop = ({ propStop, closeAddStop }) => {
         </div>
 
         <div className="add-stop-button-wrap">
-            <button
-              className="add-stop-button"
-              type="submit"
-              onClick={e => addStop(e)}
-              onKeyDown={e => addStop(e)}
-              tabIndex={0}
-            >
-              {isEditing ? "Save Changes": 'Add Stop'}
-            </button>
+          <button
+            className="add-stop-button"
+            type="submit"
+            onClick={e => addStop(e)}
+            onKeyDown={e => addStop(e)}
+            tabIndex={0}
+          >
+            {isEditing ? "Save Changes" : "Add Stop"}
+          </button>
         </div>
       </form>
 

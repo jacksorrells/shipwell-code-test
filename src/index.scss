@@ -46,7 +46,6 @@ button{
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 10px;
 
   .add-stop-form{
     display:flex;
@@ -54,15 +53,14 @@ button{
 
     label { padding: 5px; }
   }
-
-
-  div{
-    padding:10px;
-  }
-
+  div{padding:10px;}
   .add-stop-error, .add-stop-adding{
     text-align: center;
   }
+}
+.add-stop-top{
+  border-bottom: 1px solid #333;
+  background-color: lightgrey;
 }
 
 
@@ -99,6 +97,16 @@ button{
   }
 }
 
+#complete-stop{
+  cursor: pointer;
+  border-color: gray;
+  color: #343434;
+  height: 16px;
+  width: 16px;
+  display: block;
+  border: 1px solid gray;
+  border-radius: 16px;
+}
 
 
 
